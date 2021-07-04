@@ -1,3 +1,4 @@
+from typing import Tuple
 import torch
 import torch.nn as nn
 
@@ -13,14 +14,14 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.n = n
         self.embed = Embedding(vocab_size, d_model)
-        self.pe = PositionalEncoder(d_model, device, dropout=dropout)
+        self.pe = PositionalEncoder(d_model, dropout=dropout)
         self.layers = tu.get_clones(DecoderLayer(d_model, heads, dropout), n)
         self.norm = Norm(d_model)
 
     def forward(self, trg: torch.Tensor, e_outputs: torch.Tensor, src_mask: torch.Tensor,
-                trg_mask: torch.Tensor) -> torch.Tensor:
+                trg_masks: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         x = self.embed(trg)
         x = self.pe(x)
         for i in range(self.n):
-            x = self.layers[i](x, e_outputs, src_mask, trg_mask)
+            x = self.layers[i](x, e_outputs, src_mask, trg_masks)
         return self.norm(x)

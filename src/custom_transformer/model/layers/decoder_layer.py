@@ -1,3 +1,4 @@
+from typing import Tuple
 import torch.nn as nn
 import torch
 
@@ -17,16 +18,18 @@ class DecoderLayer(nn.Module):
         self.dropout_2 = nn.Dropout(dropout)
         self.dropout_3 = nn.Dropout(dropout)
 
-        self.attn_1 = MultiHeadAttentionLayer(heads, d_model, dropout=dropout)
-        self.attn_2 = MultiHeadAttentionLayer(heads, d_model, dropout=dropout)
+        self.attn_1 = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+        self.attn_2 = nn.MultiheadAttention(d_model, heads, dropout=dropout)
         self.ff = FeedForward(d_model, dropout=dropout)
 
     def forward(self, x: torch.Tensor, e_outputs: torch.Tensor, src_mask: torch.Tensor,
-                trg_mask: torch.Tensor) -> torch.Tensor:
+                trg_masks: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         x2 = self.norm_1(x)
-        x = x + self.dropout_1(self.attn_1(x2, x2, x2, trg_mask))
+        attention_1 = self.attn_2(x2, e_outputs, e_outputs, key_padding_mask=trg_masks[0], attn_mask=trg_masks[1])
+        x = x + self.dropout_1(attention_1[0])
         x2 = self.norm_2(x)
-        x = x + self.dropout_2(self.attn_2(x2, e_outputs, e_outputs, src_mask))
+        attention_2 = self.attn_2(x2, e_outputs, e_outputs, key_padding_mask=src_mask)
+        x = x + self.dropout_2(attention_2[0])
         x2 = self.norm_3(x)
         x = x + self.dropout_3(self.ff(x2))
         return x

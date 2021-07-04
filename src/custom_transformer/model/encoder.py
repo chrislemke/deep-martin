@@ -13,7 +13,7 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.n = n
         self.embed = Embedding(vocab_size, d_model)
-        self.pe = PositionalEncoder(d_model, device, dropout=dropout)
+        self.pe = PositionalEncoder(d_model, dropout=dropout)
         self.layers = tu.get_clones(EncoderLayer(d_model, heads, dropout), n)
         self.norm = Norm(d_model)
 

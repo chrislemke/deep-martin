@@ -1,3 +1,4 @@
+from typing import Tuple
 import torch
 import torch.nn as nn
 
@@ -14,9 +15,9 @@ class Transformer(nn.Module):
         self.out = nn.Linear(d_model, trg_vocab)
 
     def forward(self, src: torch.Tensor, trg: torch.Tensor, src_mask: torch.Tensor,
-                trg_mask: torch.Tensor) -> torch.Tensor:
+                trg_masks: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         e_outputs = self.encoder(src, src_mask)
-        d_output = self.decoder(trg, e_outputs, src_mask, trg_mask)
+        d_output = self.decoder(trg, e_outputs, src_mask, trg_masks)
         output = self.out(d_output)
         return output
 

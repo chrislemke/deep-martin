@@ -54,16 +54,14 @@ class TransformerTrainer:
             optimizer = torch.optim.Adam(model.parameters(), lr=arguments.lr, betas=(0.9, 0.98), eps=1e-9)
 
             for i, batch in enumerate(data_iter):
-                src_input = batch.normal.transpose(0, 1)
-                trg = batch.simple.transpose(0, 1)
-                trg_input = trg[:, :-1]
+                src_input = batch.normal
+                trg = batch.simple
 
                 optimizer.zero_grad()
-                src_mask, trg_mask = tu.create_masks(src_input, trg_input)
-                outputs = model(src_input, trg_input, src_mask, trg_mask)
-                ys = trg[:, 1:].contiguous().reshape(-1)
+                src_mask, trg_masks = tu.create_masks(src_input, trg)
+                outputs = model(src_input, trg, src_mask, trg_masks)
 
-                loss = F.cross_entropy(outputs.reshape(-1, outputs.size(-1)), ys, ignore_index=0)
+                loss = F.cross_entropy(outputs.reshape(-1, outputs.size(-1)), trg.reshape(-1), ignore_index=-100)
                 loss.backward()
                 optimizer.step()
 

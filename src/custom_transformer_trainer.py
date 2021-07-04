@@ -4,6 +4,10 @@ from transformers import AutoTokenizer
 from training.custom_transformer_training import TransformerTrainer
 
 if __name__ == '__main__':
+    import os
+
+    os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--ds_path", type=str)
     parser.add_argument("--train_file", type=str)

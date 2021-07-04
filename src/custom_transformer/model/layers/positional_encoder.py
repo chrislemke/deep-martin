@@ -5,22 +5,20 @@ from torch.autograd import Variable
 
 
 class PositionalEncoder(nn.Module):
-    def __init__(self, d_model: int, device: torch.device, max_seq_len: int = 200, dropout: float = 0.1):
-        super(PositionalEncoder, self).__init__()
-        self.d_model = d_model
-        self.device = device
-        self.dropout = nn.Dropout(dropout)
-        pe = torch.zeros(max_seq_len, d_model)
-        for pos in range(max_seq_len):
-            for i in range(0, d_model, 2):
-                pe[pos, i] = math.sin(pos / (10000 ** (i / d_model)))
-                pe[pos, i + 1] = math.cos(pos / (10000 ** (i / d_model)))
-        pe = pe.unsqueeze(0)
-        self.register_buffer('pe', pe)
+        def __init__(self,
+                     emb_size: int,
+                     dropout: float,
+                     max_length: int = 5000):
+            super(PositionalEncoder, self).__init__()
+            den = torch.exp(- torch.arange(0, emb_size, 2) * math.log(10000) / emb_size)
+            pos = torch.arange(0, max_length).reshape(max_length, 1)
+            pos_embedding = torch.zeros((max_length, emb_size))
+            pos_embedding[:, 0::2] = torch.sin(pos * den)
+            pos_embedding[:, 1::2] = torch.cos(pos * den)
+            pos_embedding = pos_embedding.unsqueeze(-2)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x * math.sqrt(self.d_model)
-        seq_len = x.size(1)
-        pe = Variable(self.pe[:, :seq_len], requires_grad=False)
-        x = x + pe.to(self.device)
-        return self.dropout(x)
+            self.dropout = nn.Dropout(dropout)
+            self.register_buffer('pos_embedding', pos_embedding)
+
+        def forward(self, token_embedding: torch.Tensor) -> torch.Tensor:
+            return self.dropout(token_embedding + self.pos_embedding[:token_embedding.size(0), :])
