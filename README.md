@@ -76,7 +76,7 @@ With the help of <a href="https://aws.amazon.com/de/ec2">AWS EC2</a>, things can
 
 <h3>Next steps</h3>
 <p>Since the self-made-transformer is a work in progress project it is never finished.
-It is made for learning and trying out. One interesting idea is to use the
-transformer as a generator in a GAN to improve to overall output.</p>
+It is made for learning and trying out. One interesting idea is to use the embeddings of a pre-trained encoder like BERT. 
+Another one is to use the transformer as a generator in a GAN to improve to overall output.</p>
 
 

@@ -5,7 +5,6 @@ from src.custom_transformer.model.layers.embedding_layer import Embedding
 import src.custom_transformer.model.transformer_model_utils as tu
 from src.custom_transformer.model.layers.positional_encoder import PositionalEncoder
 from src.custom_transformer.model.layers.encoder_layer import EncoderLayer
-from src.custom_transformer.model.layers.normalisation_layer import Norm
 
 
 class Encoder(nn.Module):
@@ -15,7 +14,7 @@ class Encoder(nn.Module):
         self.embed = Embedding(vocab_size, d_model)
         self.pe = PositionalEncoder(d_model, dropout=dropout)
         self.layers = tu.get_clones(EncoderLayer(d_model, heads, dropout), n)
-        self.norm = Norm(d_model)
+        self.norm = nn.LayerNorm(d_model)
 
     def forward(self, src: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
         x = self.embed(src)
