@@ -61,8 +61,9 @@ class TransformerTrainer:
                 optimizer.zero_grad()
                 src_mask, trg_masks = tu.create_masks(src_input, trg_input)
                 outputs = model(src_input, trg_input, src_mask, trg_masks)
+                y = trg[1:, :].reshape(-1)
 
-                loss = F.cross_entropy(outputs.reshape(-1, outputs.size(-1)), trg.reshape(-1), ignore_index=-100)
+                loss = F.cross_entropy(outputs.reshape(-1, outputs.size(-1)), y, ignore_index=0)
                 loss.backward()
                 optimizer.step()
 
