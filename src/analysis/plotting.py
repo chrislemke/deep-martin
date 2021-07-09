@@ -26,7 +26,7 @@ class Plotter:
 
     @staticmethod
     def plot_distribution(values, title: str, x_title: str, bins: Optional[int] = None,
-                          save_path: Optional[str] = None, hover_data=None):
+                          save_path: Optional[str] = None, hover_data=None, show_legend: bool = False):
 
         labels = {
             "value": x_title,
@@ -35,7 +35,7 @@ class Plotter:
 
         fig = px.histogram(values, title=title, nbins=bins, labels=labels, marginal='box', opacity=0.5,
                            hover_data=hover_data)
-        fig.layout.update(showlegend=False)
+        fig.layout.update(showlegend=show_legend)
 
         if save_path is not None:
             fig.write_html(save_path)

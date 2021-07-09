@@ -32,7 +32,6 @@ class CTransformerEvaluator:
         self.model.eval()
 
 
-
 class HFEvaluator:
 
     def __init__(self, eval_dataset_path: str, model_path: str, doc2vec_model_path: str,
@@ -101,7 +100,7 @@ class HFEvaluator:
 
         return outputs
 
-    def tokenize(self, sources: List[str]) -> Tuple[torch.Tensor, torch.Tensor]:
+    def __tokenize(self, sources: List[str]) -> Tuple[torch.Tensor, torch.Tensor]:
         inputs = self.tokenizer(sources, padding='max_length', truncation=True, return_tensors='pt')
 
         input_ids = inputs.input_ids.to(self.device)
@@ -141,13 +140,13 @@ class HFEvaluator:
         dictionary = dict(itertools.islice(self.__sources_and_references().items(), 1))
         result_df = pd.DataFrame(columns=['Index', 'SARI', 'temperature'])
 
-        temperatures = [0.2, 0.75, 0.5, 1.0, 1.5, 2.0, 2.5, 3., 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5,
-                        9.0, 9.5, 10.0]
+        temperatures = [0.2, 0.75, 0.5, 1.0, 1.5, 2.0, 2.5, 3., 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5,
+                        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
         config = model_config
         index = 0
 
         for source, references in tqdm(dictionary.items()):
-            inputs = self.tokenize(source)
+            inputs = self.__tokenize(source)
 
             for temperature in temperatures:
                 config['temperature'] = temperature
@@ -168,8 +167,8 @@ def evaluate_with_dataset(self, model_config: Dict, csv_output_path: Optional[st
     result_df = pd.DataFrame(columns=['Normal', 'Simple', 'SARI', 'METEOR', 'ROUGE_F'])
 
     for source, references in tqdm(self.__sources_and_references().items()):
-        inputs = self.tokenize(source)
-        reference_tokens = self.tokenize(references)
+        inputs = self.__tokenize(source)
+        reference_tokens = self.__tokenize(references)
         output = self.generate(*inputs, model_config=model_config)
 
         glue_result = self.eval_glue_score(predictions=inputs[0][0].tolist(),

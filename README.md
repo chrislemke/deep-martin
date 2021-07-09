@@ -1,7 +1,7 @@
 <img src="https://github.com/stoffy/martin/blob/master/images/title_image.png?raw=true" alt="Deep Martin">
 
-<h1>Deep Martin - text simplification</h1>
-<h2>the Heidegger countermovement</h2>
+<h1>Deep Martin</h1>
+<h2>Text simplification for the democratization of knowledge</h2>
 <blockquote><a href="https://www.deepl.com/translator#de/en/Danach%20ist%20das%20In-der-Welt-sein%20ein%20Sich-vorweg-schon%20sein-in-der%20Welt%20als%20Sein-bei-innerweltlich-begegnendem-Seienden">Danach ist das In-der-Welt-sein ein Sich-vorweg-schon sein-in-der Welt als Sein-bei-innerweltlich-begegnendem-Seienden</a><br><b>Martin Heidegger</b></blockquote>
 <h3>Unsimplifiable, untranslatable</h3>
 
