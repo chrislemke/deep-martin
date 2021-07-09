@@ -22,7 +22,7 @@ This can be used to create various state of the art sequence to sequence models.
 The other part is a self-made transformer. 
 Here it is mainly about trying out different approaches.</p>
 <h4>Hugging Face</h4>
-<p>For using the Hugging Face implementation you need to provide a dataset.It needs to have one column with the normal version (<code>Normal</code>)
+<p>For using the Hugging Face implementation you need to provide a dataset. It needs to have one column with the normal version (<code>Normal</code>)
 and one for the simplified version (<code>Simple</code>).
 The <code>HuggingFaceDataset</code> class can help you with it.<br>To train
 a model you then simple run something like:<br></p>
@@ -58,7 +58,7 @@ python /your/path/to/deep-martin/src/custom_transformer_trainer.py \
 <p>As is so often the case, one problem lies in obtaining high-quality data.
 Multiple datasets where used for this project. You can find them 
 <a href="https://paperswithcode.com/task/text-simplification">here</a>.<br>
-While the ASSET dataset provides a very good basis due to the multiple simplification of each record, its size is simply too small for training a transformer. 
+While the ASSET dataset provides a very good quality due to the multiple simplification of each record, its size is simply too small for training a transformer. 
 This problem is also true for other datasets. 
 The two datasets based on Wikipedia unfortunately suffer from 
 lack of quality. Either records are not simplification, 
