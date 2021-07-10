@@ -18,14 +18,14 @@ It follows the approach of <a href="https://simple.wikipedia.org/wiki/Main_Page"
 
 <p>Two different approaches are available. 
 One is to use the super nice <a href="https://huggingface.co">Hugging Face</a> library. 
-This can be used to create various state of the art sequence to sequence models. 
+This can be used to create various state-of-the-art sequence to sequence models. 
 The other part is a self-made transformer. 
 Here it is mainly about trying out different approaches.</p>
 <h4>Hugging Face</h4>
 <p>For using the Hugging Face implementation you need to provide a dataset. It needs to have one column with the normal version (<code>Normal</code>)
 and one for the simplified version (<code>Simple</code>).
 The <code>HuggingFaceDataset</code> class can help you with it.<br>To train
-a model you then simple run something like:<br></p>
+a model you then simply run something like:<br></p>
 <pre>
 python /your/path/to/deep-martin/src/hf_transformer_trainer.py \
 --eval_steps 5000 \ # This number should be based on the size of the dataset. 
@@ -38,8 +38,8 @@ python /your/path/to/deep-martin/src/hf_transformer_trainer.py \
 <p>There are a lot more parameters. Check out <code>hf_transformer_trainer.py</code> to get an overview.</p>
 
 <h4>Self-made-transformer</h4>
-<p>This transformer is more for experimenting. Have a look at the code and get an overview about what is going on.
-To train the self-made-transformer a train and a test dataset as CSV is needed. This will be transformed
+<p>This transformer is more for experimenting. Have a look at the code and get an overview of what is going on.
+To train the self-made-transformer, a train and a test dataset as CSV is needed. This will be transformed
 to a suitable dataset at the beginning of the training. Same as with the transformers from above the dataset needs to have one column with the normal version (<code>Normal</code>)
 and one for the simplified version (<code>Simple</code>) <br>
 To start the training you can run:<br></p>
@@ -55,13 +55,13 @@ python /your/path/to/deep-martin/src/custom_transformer_trainer.py \
 <h3>Challenges</h3>
 <p>Let's talk about the problems in this project. </p>
 <h4>Dataset</h4>
-<p>As is so often the case, one problem lies in obtaining high-quality data.
-Multiple datasets where used for this project. You can find them 
+<p>As so often, one problem lies in obtaining high-quality data.
+Multiple datasets were used for this project. You can find them 
 <a href="https://paperswithcode.com/task/text-simplification">here</a>.<br>
 While the ASSET dataset provides a very good quality due to the multiple simplification of each record, its size is simply too small for training a transformer. 
 This problem is also true for other datasets. 
-The two datasets based on Wikipedia unfortunately suffer from 
-lack of quality. Either records are not simplification, 
+The two datasets based on Wikipedia unfortunately suffer from
+lack of quality. Either a record is not a simplification, 
 but simply the same article. Or the simplification is of poor quality. In both cases, using it meant worse results.
 To increase the overall quality, the records were compared and 
 filtered out using <a href="https://radimrehurek.com/gensim/models/doc2vec.html">Doc2Vec</a> and cosine distance. 
@@ -71,13 +71,13 @@ filtered out using <a href="https://radimrehurek.com/gensim/models/doc2vec.html"
 <p>
 Transformers are huge, need a lot of data and a lot of time to train. 
 <a href="http://research.google.com/colaboratory/">Google colab</a> can help, but it is not the most convenient way. 
-With the help of <a href="https://aws.amazon.com/de/ec2">AWS EC2</a>, things can be sped up a lot and training of larger models is also possible.
+With the help of <a href="https://aws.amazon.com/de/ec2">AWS EC2</a>, things can be sped up a lot and, training of larger models is also possible.
 </p>
 
 <h3>Next steps</h3>
-<p>Since the self-made-transformer is a work in progress project it is never finished.
+<p>Since the self-made-transformer is a work-in-progress project, it is never finished.
 It is made for learning and trying out. One interesting idea is to use the
-transformer as a generator in a GAN to improve to overall output.</p>
+transformer as a generator in a GAN to improve the overall output.</p>
 
 <h3>More</h3>
 <p>Check out visualized attentions from the <b>BERT2BERT</b> model in this notebook:</p>
