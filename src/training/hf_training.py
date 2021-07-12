@@ -88,12 +88,11 @@ class HuggingFaceTrainer:
                 os.environ['WANDB_RUN_ID'] = wandb.util.generate_id()
 
             HuggingFaceTrainer.__logger.info(f"Run id: {os.environ['WANDB_RUN_ID']}\n")
-            report_to = ['wandb', 'tensorboard']
+            return ['wandb', 'tensorboard']
         else:
             os.environ['WANDB_DISABLED'] = 'true'
             HuggingFaceTrainer.__logger.info('Wandb is not running!')
-            report_to = ['tensorboard']
-        return report_to
+            return ['tensorboard']
 
     @staticmethod
     def __setup_model(model_config, model_path, pretrained_model_path, resume, tie_encoder_decoder, tokenizer):
@@ -106,7 +105,7 @@ class HuggingFaceTrainer:
             model = EncoderDecoderModel.from_pretrained(pretrained_model_path)
             HuggingFaceTrainer.__logger.info(f'Model loaded from: {pretrained_model_path}.')
 
-        elif pretrained_model_path is not None and model_path is not None:
+        elif pretrained_model_path is not None:
             model = EncoderDecoderModel.from_encoder_decoder_pretrained(model_path, model_path,
                                                                         tie_encoder_decoder=tie_encoder_decoder)
             model.save_pretrained(pretrained_model_path)

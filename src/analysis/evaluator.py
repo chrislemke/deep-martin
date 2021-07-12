@@ -96,9 +96,7 @@ class HFEvaluator:
         self.__config_model(model_config)
         model = self.model.to(self.device)
         model_output = model.generate(input_ids, attention_mask=attention_mask)
-        outputs = self.tokenizer.batch_decode(model_output, skip_special_tokens=True)
-
-        return outputs
+        return self.tokenizer.batch_decode(model_output, skip_special_tokens=True)
 
     def __tokenize(self, sources: List[str]) -> Tuple[torch.Tensor, torch.Tensor]:
         inputs = self.tokenizer(sources, padding='max_length', truncation=True, return_tensors='pt')

@@ -20,8 +20,8 @@ if __name__ == "__main__":
     parser.add_argument("--resume", type=str, default='false')
     parser.add_argument("--tokenizer_id", type=str)
 
-    parser.add_argument("--seq_max_length", type=int, default=80)
-    parser.add_argument("--seq_min_length", type=int, default=100)
+    parser.add_argument("--seq_max_length", type=int, default=120)
+    parser.add_argument("--seq_min_length", type=int, default=80)
     parser.add_argument("--no_repeat_ngram_size", type=int, default=0)
     parser.add_argument("--length_penalty", type=float, default=1.0)
     parser.add_argument("--num_beams", type=int, default=1)

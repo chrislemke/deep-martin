@@ -4,8 +4,8 @@ import re
 from tqdm import tqdm
 from spacy.lang.en.stop_words import STOP_WORDS
 
-from src import ToVec
-from src import SentenceSimilarity
+from src.analysis.doc2vec import ToVec
+from src.analysis.text_similarity import SentenceSimilarity
 
 
 class AnalysisHelper:
@@ -48,7 +48,10 @@ class AnalysisHelper:
         return self.to_vec.cosine_distance(row['Normal'], row['Simple'])
 
     def __cosine_similarity(self, row) -> float:
-        return self.to_vec.cosine_similarity(row['Normal'], row['Simple'])
+        if type(row['Normal']) is str and type(row['Simple'] is str):
+            return self.to_vec.cosine_similarity(row['Normal'], row['Simple'])
+        else:
+            return 0.0
 
     def __sentence_similarity(self, row) -> float:
         return self.sentence_similarity.cosine_similarity(row['Normal'], row['Simple'])
