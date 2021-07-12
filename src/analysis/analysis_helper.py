@@ -4,8 +4,8 @@ import re
 from tqdm import tqdm
 from spacy.lang.en.stop_words import STOP_WORDS
 
-from src import ToVec
-from src import SentenceSimilarity
+from src.analysis.doc2vec import ToVec
+from src.analysis.text_similarity import SentenceSimilarity
 
 
 class AnalysisHelper:
