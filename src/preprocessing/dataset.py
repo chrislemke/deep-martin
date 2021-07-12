@@ -61,7 +61,7 @@ class DatasetHelper:
         final_df.to_csv(output_csv_path, index=False)
 
     @staticmethod
-    def concat_split(middle_csv_path: str, to_split_csv_path: str, output_csv_path: str, first_split: float = 0.2):
+    def concat_split(middle_csv_path: str, to_split_csv_path: str, output_csv_path: str, first_split: float = 0.8):
         middle_df = pd.read_csv(middle_csv_path)
         to_split_df = pd.read_csv(to_split_csv_path)
         print('middle_df.shape', middle_df.shape)

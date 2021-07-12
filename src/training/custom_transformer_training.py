@@ -44,11 +44,14 @@ class TransformerTrainer:
             running_loss = 0
             epoch_loss = 0
 
-            if arguments.checkpoint == 'true' and save_model_path is not None:
-                if epoch > 0:
-                    torch.save(model.state_dict(), f'{save_model_path}/model_checkpoint_epoch-{epoch}.pt')
-                    TransformerTrainer.__logger.info(
-                        f'Checkpoint saved to: {save_model_path}/model_checkpoint_epoch-{epoch}.')
+            if (
+                arguments.checkpoint == 'true'
+                and save_model_path is not None
+                and epoch > 0
+            ):
+                torch.save(model.state_dict(), f'{save_model_path}/model_checkpoint_epoch-{epoch}.pt')
+                TransformerTrainer.__logger.info(
+                    f'Checkpoint saved to: {save_model_path}/model_checkpoint_epoch-{epoch}.')
 
             arguments.train_len = tu.get_len(data_iter)
             optimizer = torch.optim.Adam(model.parameters(), lr=arguments.lr, betas=(0.9, 0.98), eps=1e-9)

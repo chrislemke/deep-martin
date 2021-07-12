@@ -105,7 +105,7 @@ class HuggingFaceTrainer:
             model = EncoderDecoderModel.from_pretrained(pretrained_model_path)
             HuggingFaceTrainer.__logger.info(f'Model loaded from: {pretrained_model_path}.')
 
-        elif pretrained_model_path is not None and model_path is not None:
+        elif pretrained_model_path is not None:
             model = EncoderDecoderModel.from_encoder_decoder_pretrained(model_path, model_path,
                                                                         tie_encoder_decoder=tie_encoder_decoder)
             model.save_pretrained(pretrained_model_path)

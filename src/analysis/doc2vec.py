@@ -11,8 +11,7 @@ class ToVec:
     def cosine_distance(self, normal_str: str, simple_str: str) -> float:
         normal_vector = self.model.infer_vector(normal_str.split())
         simple_vector = self.model.infer_vector(simple_str.split())
-        cosine_distance = spatial.distance.cosine(normal_vector, simple_vector)
-        return cosine_distance
+        return spatial.distance.cosine(normal_vector, simple_vector)
 
     def cosine_similarity(self, normal_string: str, simple_string: str) -> float:
         normal_vector = self.model.infer_vector(normal_string.split())
