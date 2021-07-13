@@ -8,12 +8,12 @@ from src.custom_transformer.model.layers.encoder_layer import EncoderLayer
 
 
 class Encoder(nn.Module):
-    def __init__(self, vocab_size: int, d_model: int, n: int, heads: int, dropout: float, device: torch.device):
+    def __init__(self, vocab_size: int, d_model: int, n: int, heads: int, dropout: float, max_length: int):
         super(Encoder, self).__init__()
         self.n = n
         self.embed = Embedding(vocab_size, d_model)
         self.pe = PositionalEncoder(d_model, dropout=dropout)
-        self.layers = tu.get_clones(EncoderLayer(d_model, heads, dropout), n)
+        self.layers = tu.get_clones(EncoderLayer(d_model, heads, max_length, dropout), n)
         self.norm = nn.LayerNorm(d_model)
 
     def forward(self, src: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:

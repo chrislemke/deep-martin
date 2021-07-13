@@ -9,12 +9,12 @@ import src.custom_transformer.model.transformer_model_utils as tu
 
 
 class Decoder(nn.Module):
-    def __init__(self, vocab_size: int, d_model: int, n: int, heads: int, dropout: float, device: torch.device):
+    def __init__(self, vocab_size: int, d_model: int, n: int, heads: int, dropout: float, max_length: int):
         super(Decoder, self).__init__()
         self.n = n
         self.embed = Embedding(vocab_size, d_model)
         self.pe = PositionalEncoder(d_model, dropout=dropout)
-        self.layers = tu.get_clones(DecoderLayer(d_model, heads, dropout), n)
+        self.layers = tu.get_clones(DecoderLayer(d_model, heads, max_length, dropout), n)
         self.norm = nn.LayerNorm(d_model)
 
     def forward(self, trg: torch.Tensor, e_outputs: torch.Tensor, src_mask: torch.Tensor,

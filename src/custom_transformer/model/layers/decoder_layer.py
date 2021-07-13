@@ -6,8 +6,11 @@ from src.custom_transformer.model.layers.feed_forward_layer import FeedForward
 
 
 class DecoderLayer(nn.Module):
-    def __init__(self, d_model: int, heads: int, dropout: float = 0.1):
+    def __init__(self, d_model: int, heads: int, max_length: int, dropout: float = 0.1):
         super(DecoderLayer, self).__init__()
+
+        self.d_model = d_model
+        self.max_length = max_length
         self.norm_1 = nn.LayerNorm(d_model)
         self.norm_2 = nn.LayerNorm(d_model)
         self.norm_3 = nn.LayerNorm(d_model)
@@ -22,6 +25,7 @@ class DecoderLayer(nn.Module):
 
     def forward(self, x: torch.Tensor, e_outputs: torch.Tensor, src_mask: torch.Tensor,
                 trg_masks: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
+        x = x.reshape(self.max_length-1, -1, self.d_model)
         x2 = self.norm_1(x)
         attention_1 = self.attn_2(x2, x2, x2, key_padding_mask=trg_masks[0], attn_mask=trg_masks[1])
         x = x + self.dropout_1(attention_1[0])

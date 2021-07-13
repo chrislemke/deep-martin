@@ -28,7 +28,7 @@ class TransformerTrainer:
         TransformerTrainer.setup_logger('INFO')
 
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        model = get_model(arguments, vocab_size, vocab_size, device)
+        model = get_model(arguments, vocab_size, vocab_size, device, arguments.max_length)
 
         model.train()
         start = time.time()
@@ -57,14 +57,14 @@ class TransformerTrainer:
             optimizer = torch.optim.Adam(model.parameters(), lr=arguments.lr, betas=(0.9, 0.98), eps=1e-9)
 
             for i, batch in enumerate(data_iter):
-                src_input = batch.normal
-                trg = batch.simple
-                trg_input = trg[:-1, :]
+                src_input = batch.normal.T
+                trg = batch.simple.T
+                trg_input = trg[:, :-1]
 
                 optimizer.zero_grad()
                 src_mask, trg_masks = tu.create_masks(src_input, trg_input)
                 outputs = model(src_input, trg_input, src_mask, trg_masks)
-                y = trg[1:, :].reshape(-1)
+                y = trg[:, 1:].reshape(-1)
 
                 loss = F.cross_entropy(outputs.reshape(-1, outputs.size(-1)), y, ignore_index=0)
                 loss.backward()

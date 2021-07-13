@@ -16,10 +16,10 @@ def attention_mask(size: int):
 
 
 def create_masks(src: torch.Tensor, trg: torch.Tensor):
-    src_mask = (src != 0).T
+    src_mask = (src != 0)
 
-    trg_mask = (trg != 0).T
-    size = trg.size(0)
+    trg_mask = (trg != 0)
+    size = trg.size(1)
     att_mask = attention_mask(size)
     if trg.is_cuda:
         att_mask = att_mask.to('cuda')

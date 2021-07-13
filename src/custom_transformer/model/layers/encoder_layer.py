@@ -5,8 +5,10 @@ from src.custom_transformer.model.layers.feed_forward_layer import FeedForward
 
 
 class EncoderLayer(nn.Module):
-    def __init__(self, d_model: int, heads: int, dropout: float = 0.1):
+    def __init__(self, d_model: int, heads: int, max_length: int, dropout: float = 0.1):
         super(EncoderLayer, self).__init__()
+        self.d_model = d_model
+        self.max_length = max_length
         self.norm_1 = nn.LayerNorm(d_model)
         self.norm_2 = nn.LayerNorm(d_model)
         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
@@ -15,6 +17,7 @@ class EncoderLayer(nn.Module):
         self.dropout_2 = nn.Dropout(dropout)
 
     def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        x = x.reshape(self.max_length, -1, self.d_model)
         x2 = self.norm_1(x)
         attention = self.attn(x2, x2, x2, mask)
         x = x + self.dropout_1(attention[0])
