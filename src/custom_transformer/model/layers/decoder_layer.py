@@ -27,11 +27,11 @@ class DecoderLayer(nn.Module):
                 trg_masks: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         x = x.reshape(self.max_length-1, -1, self.d_model)
         x2 = self.norm_1(x)
-        attention_1 = self.attn_2(x2, x2, x2, key_padding_mask=trg_masks[0], attn_mask=trg_masks[1])
-        x = x + self.dropout_1(attention_1[0])
+        attention_1 = self.attn_2(x2, x2, x2, key_padding_mask=trg_masks[0], attn_mask=trg_masks[1])[0]
+        x = x + self.dropout_1(attention_1)
         x2 = self.norm_2(x)
-        attention_2 = self.attn_2(x2, e_outputs, e_outputs, key_padding_mask=src_mask)
-        x = x + self.dropout_2(attention_2[0])
+        attention_2 = self.attn_2(x2, e_outputs, e_outputs, key_padding_mask=src_mask)[0]
+        x = x + self.dropout_2(attention_2)
         x2 = self.norm_3(x)
         x = x + self.dropout_3(self.ff(x2))
         return x

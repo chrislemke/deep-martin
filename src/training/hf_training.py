@@ -12,8 +12,6 @@ from transformers import EvalPrediction, AutoTokenizer, EncoderDecoderModel, Seq
 
 
 class HuggingFaceTrainer:
-    __rouge = load_metric('rouge')
-    __bert_score = load_metric('bertscore')
     __meteor = load_metric('meteor')
 
     __logger = logging.getLogger(__name__)
@@ -50,19 +48,9 @@ class HuggingFaceTrainer:
         labels_ids[labels_ids == -100] = tokenizer.pad_token_id
         label_str = tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
 
-        rouge_output = \
-            HuggingFaceTrainer.__rouge.compute(predictions=pred_str, references=label_str, rouge_types=['rouge2'])[
-                'rouge2'].mid
-        bert_score_output = HuggingFaceTrainer.__bert_score.compute(predictions=pred_str, references=label_str,
-                                                                    lang='en')
-
         meteor_output = HuggingFaceTrainer.__meteor.compute(predictions=pred_str, references=label_str)
         return {
-            'bert_score_f1': round(bert_score_output['f1'][0], 4),
-            'meteor_score': round(meteor_output['meteor'], 4),
-            'rouge2_precision': round(rouge_output.precision, 4),
-            'rouge2_recall': round(rouge_output.recall, 4),
-            'rouge2_f_measure': round(rouge_output.fmeasure, 4)
+            'meteor_score': round(meteor_output['meteor'], 4)
         }
 
     @staticmethod

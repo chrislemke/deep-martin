@@ -71,15 +71,24 @@ class HFEvaluator:
         self.model.config.vocab_size = self.model.config.encoder.vocab_size
         self.model.config.max_length = model_config['max_length']
         self.model.config.min_length = model_config['min_length']
-        self.model.config.no_repeat_ngram_size = model_config['no_repeat_ngram_size']
-        self.model.config.early_stopping = model_config['early_stopping']
-        self.model.config.length_penalty = model_config['length_penalty']
-        self.model.config.num_beams = model_config['num_beams']
-        self.model.config.temperature = model_config['temperature']
-        self.model.config.top_k = model_config['top_k']
-        self.model.config.top_p = model_config['top_p']
-        self.model.config.num_beam_groups = model_config['num_beam_groups']
-        self.model.config.do_sample = model_config['do_sample']
+        if 'no_repeat_ngram_size' in model_config:
+            self.model.config.no_repeat_ngram_size = model_config['no_repeat_ngram_size']
+        if 'early_stopping' in model_config:
+            self.model.config.early_stopping = model_config['early_stopping']
+        if 'length_penalty' in model_config:
+            self.model.config.length_penalty = model_config['length_penalty']
+        if 'num_beams' in model_config:
+            self.model.config.num_beams = model_config['num_beams']
+        if 'temperature' in model_config:
+            self.model.config.temperature = model_config['temperature']
+        if 'top_k' in model_config:
+            self.model.config.top_k = model_config['top_k']
+        if 'top_p' in model_config:
+            self.model.config.top_p = model_config['top_p']
+        if 'num_beam_groups' in model_config:
+            self.model.config.num_beam_groups = model_config['num_beam_groups']
+        if 'do_sample' in model_config:
+            self.model.config.do_sample = model_config['do_sample']
 
     def __sources_and_references(self) -> Dict:
         dictionary = {}
@@ -141,9 +150,7 @@ class HFEvaluator:
         temperatures = [0.2, 0.75, 0.5, 1.0, 1.5, 2.0, 2.5, 3., 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5,
                         7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
         config = model_config
-        index = 0
-
-        for source, references in tqdm(dictionary.items()):
+        for index, (source, references) in tqdm(enumerate(dictionary.items())):
             inputs = self.__tokenize(source)
 
             for temperature in temperatures:
@@ -156,44 +163,56 @@ class HFEvaluator:
                     'SARI': sari_result['sari_score'],
                     'temperature': temperature
                 }, ignore_index=True)
-            index += 1
         result_df.to_csv(csv_output_path, index=False)
 
+    def evaluate_with_dataset(self, model_config: Dict, csv_output_path: Optional[str] = None,
+                              extend_dataframe: bool = False):
+        result_df = pd.DataFrame(columns=['Normal', 'Simple', 'SARI', 'METEOR', 'ROUGE_F'])
 
-def evaluate_with_dataset(self, model_config: Dict, csv_output_path: Optional[str] = None,
-                          extend_dataframe: bool = False):
-    result_df = pd.DataFrame(columns=['Normal', 'Simple', 'SARI', 'METEOR', 'ROUGE_F'])
+        for source, references in tqdm(self.__sources_and_references().items()):
+            inputs = self.__tokenize(source)
+            reference_tokens = self.__tokenize(references)
+            output = self.generate(*inputs, model_config=model_config)
 
-    for source, references in tqdm(self.__sources_and_references().items()):
-        inputs = self.__tokenize(source)
-        reference_tokens = self.__tokenize(references)
-        output = self.generate(*inputs, model_config=model_config)
+            glue_result = self.eval_glue_score(predictions=inputs[0][0].tolist(),
+                                               references=reference_tokens[0][5].tolist())
 
-        glue_result = self.eval_glue_score(predictions=inputs[0][0].tolist(),
-                                           references=reference_tokens[0][5].tolist())
+            rouge_result = self.eval_rouge_scores(predictions=output, references=[references[0]])
+            sari_result = self.eval_sari_score(sources=[source], predictions=[output[0]],
+                                               references=[references])
+            meteor_result = self.eval_meteor_score(predictions=output, references=[references[0]])
 
-        rouge_result = self.eval_rouge_scores(predictions=output, references=[references[0]])
-        sari_result = self.eval_sari_score(sources=[source], predictions=[output[0]],
-                                           references=[references])
-        meteor_result = self.eval_meteor_score(predictions=output, references=[references[0]])
+            result_df = result_df.append({
+                'Normal': source,
+                'Simple': output[0],
+                'SARI': sari_result['sari_score'],
+                'METEOR': meteor_result['meteor_score'],
+                'ROUGE_F': rouge_result['rouge2_f_measure'],
+                'SPEARMAN_CORRELATION': glue_result['glue_spearman_r'],
+                'PEARSON_CORRELATION': glue_result['glue_pearson']
+            }, ignore_index=True)
 
-        result_df = result_df.append({
-            'Normal': source,
-            'Simple': output[0],
-            'SARI': sari_result['sari_score'],
-            'METEOR': meteor_result['meteor_score'],
-            'ROUGE_F': rouge_result['rouge2_f_measure'],
-            'SPEARMAN_CORRELATION': glue_result['glue_spearman_r'],
-            'PEARSON_CORRELATION': glue_result['glue_pearson']
-        }, ignore_index=True)
+        if extend_dataframe:
+            self.analysis_helper.add_df(result_df)
+            self.analysis_helper.sentence_length()
+            self.analysis_helper.stop_words_count()
+            self.analysis_helper.cosine_similarity()
+            result_df = self.analysis_helper.to_df()
 
-    if extend_dataframe:
-        self.analysis_helper.add_df(result_df)
-        self.analysis_helper.sentence_length()
-        self.analysis_helper.stop_words_count()
-        self.analysis_helper.cosine_similarity()
-        result_df = self.analysis_helper.to_df()
+        if csv_output_path is not None:
+            result_df.to_csv(csv_output_path, index=False)
+            print(f'Dataframe saved at: {csv_output_path}.')
 
-    if csv_output_path is not None:
-        result_df.to_csv(csv_output_path, index=False)
-        print(f'Dataframe saved at: {csv_output_path}.')
+
+if __name__ == '__main__':
+    eds = '/Users/chris/Google Drive/deep-martin/data/asset/processed/proc_a_tail.csv'
+    model = '/Users/chris/Google Drive/deep-martin/models/transformer/_fine_tuned/bert_bert_tied'
+    d2v = '/Users/chris/Google Drive/deep-martin/models/doc2vec/enwiki_dbow/doc2vec.bin'
+    e = HFEvaluator(eval_dataset_path=eds, model_path=model, doc2vec_model_path=d2v)
+
+    model_config_dict = {
+        'max_length': 120,
+        'min_length': 80
+    }
+
+    e.evaluate_with_dataset(model_config=model_config_dict, csv_output_path='output!.csv', extend_dataframe=True)
