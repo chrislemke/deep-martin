@@ -78,9 +78,3 @@ With the help of <a href="https://aws.amazon.com/de/ec2">AWS EC2</a>, things can
 <p>Since the self-made-transformer is a work-in-progress project, it is never finished.
 It is made for learning and trying out. One interesting idea is to use the
 transformer as a generator in a GAN to improve the overall output.</p>
-
-<h3>More</h3>
-<p>Check out visualized attentions from the <b>BERT2BERT</b> model in this notebook:</p>
-<a href="https://colab.research.google.com/github/stoffy/deep-martin/blob/master/notebooks/attention_viszualizer.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
