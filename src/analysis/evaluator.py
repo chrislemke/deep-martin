@@ -134,31 +134,6 @@ class HFEvaluator:
             'glue_spearman_r': round(result['spearmanr'], 4)
         }
 
-    def evaluate_for_config_range(self, csv_output_path: str, model_config: Dict):
-        dictionary = dict(itertools.islice(self.__sources_and_references().items(), 1))
-        result_df = pd.DataFrame(columns=['Index', 'SARI', 'temperature'])
-
-        temperatures = [0.2, 0.75, 0.5, 1.0, 1.5, 2.0, 2.5, 3., 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5,
-                        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
-        config = model_config
-        index = 0
-
-        for source, references in tqdm(dictionary.items()):
-            inputs = self.__tokenize(source)
-
-            for temperature in temperatures:
-                config['temperature'] = temperature
-                output = self.generate(*inputs, model_config=config)
-                sari_result = self.eval_sari_score(sources=[source], predictions=[output[0]],
-                                                   references=[references])
-                result_df = result_df.append({
-                    'Index': index,
-                    'SARI': sari_result['sari_score'],
-                    'temperature': temperature
-                }, ignore_index=True)
-            index += 1
-        result_df.to_csv(csv_output_path, index=False)
-
 
 def evaluate_with_dataset(self, model_config: Dict, csv_output_path: Optional[str] = None,
                           extend_dataframe: bool = False):
