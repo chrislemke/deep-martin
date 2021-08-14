@@ -1,4 +1,4 @@
-<img src="https://github.com/stoffy/martin/blob/master/images/title_image.png?raw=true" alt="">
+<img src="https://github.com/stoffy/deep-martin/blob/master/images/title_image.png?raw=true" alt="">
 
 <h1>Deep Martin</h1>
 <h2>Text simplification for the democratization of knowledge</h2>
