@@ -1,6 +1,6 @@
 scikit-learn==0.24.2
 pandas==1.1.5
-numpy==1.19.5
+numpy==1.21.0
 autopep8==1.5.6
 transformers==4.5.1
 jupyter==1.0.0
