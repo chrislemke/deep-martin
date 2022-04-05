@@ -1,9 +1,11 @@
-import torch.nn as nn
 import torch
+import torch.nn as nn
 
-from src.custom_transformer.model.layers.normalisation_layer import Norm
 from src.custom_transformer.model.layers.feed_forward_layer import FeedForward
-from src.custom_transformer.model.layers.multi_head_attention_layer import MultiHeadAttentionLayer
+from src.custom_transformer.model.layers.multi_head_attention_layer import (
+    MultiHeadAttentionLayer,
+)
+from src.custom_transformer.model.layers.normalisation_layer import Norm
 
 
 class DecoderLayer(nn.Module):
@@ -21,8 +23,13 @@ class DecoderLayer(nn.Module):
         self.attn_2 = MultiHeadAttentionLayer(heads, d_model, dropout=dropout)
         self.ff = FeedForward(d_model, dropout=dropout)
 
-    def forward(self, x: torch.Tensor, e_outputs: torch.Tensor, src_mask: torch.Tensor,
-                trg_mask: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        x: torch.Tensor,
+        e_outputs: torch.Tensor,
+        src_mask: torch.Tensor,
+        trg_mask: torch.Tensor,
+    ) -> torch.Tensor:
         x2 = self.norm_1(x)
         x = x + self.dropout_1(self.attn_1(x2, x2, x2, trg_mask))
         x2 = self.norm_2(x)

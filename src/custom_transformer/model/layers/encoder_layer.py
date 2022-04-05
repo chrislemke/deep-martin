@@ -1,9 +1,11 @@
-import torch.nn as nn
 import torch
+import torch.nn as nn
 
-from src.custom_transformer.model.layers.normalisation_layer import Norm
 from src.custom_transformer.model.layers.feed_forward_layer import FeedForward
-from src.custom_transformer.model.layers.multi_head_attention_layer import MultiHeadAttentionLayer
+from src.custom_transformer.model.layers.multi_head_attention_layer import (
+    MultiHeadAttentionLayer,
+)
+from src.custom_transformer.model.layers.normalisation_layer import Norm
 
 
 class EncoderLayer(nn.Module):

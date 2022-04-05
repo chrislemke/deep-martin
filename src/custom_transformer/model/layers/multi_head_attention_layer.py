@@ -1,7 +1,8 @@
-from typing import Optional
-import torch.nn as nn
-import torch
 import math
+from typing import Optional
+
+import torch
+import torch.nn as nn
 import torch.nn.functional as F
 
 
@@ -38,8 +39,14 @@ class MultiHeadAttentionLayer(nn.Module):
         return output
 
     @staticmethod
-    def attention(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, d_k, mask: Optional[torch.Tensor] = None,
-                  dropout=None):
+    def attention(
+        q: torch.Tensor,
+        k: torch.Tensor,
+        v: torch.Tensor,
+        d_k,
+        mask: Optional[torch.Tensor] = None,
+        dropout=None,
+    ):
         scores = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(d_k)
 
         if mask is not None:
@@ -53,5 +60,6 @@ class MultiHeadAttentionLayer(nn.Module):
 
         output = torch.matmul(scores, v)
         return output
+
 
 from torch.nn import MultiheadAttention

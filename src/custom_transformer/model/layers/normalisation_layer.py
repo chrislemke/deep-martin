@@ -11,5 +11,10 @@ class Norm(nn.Module):
         self.bias = nn.Parameter(torch.zeros(self.size))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        norm = self.alpha * (x - x.mean(dim=-1, keepdims=True)) / (x.std(dim=-1, keepdims=True) + self.eps) + self.bias
+        norm = (
+            self.alpha
+            * (x - x.mean(dim=-1, keepdims=True))
+            / (x.std(dim=-1, keepdims=True) + self.eps)
+            + self.bias
+        )
         return norm

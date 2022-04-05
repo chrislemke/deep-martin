@@ -1,15 +1,22 @@
 from typing import Tuple
-from sentence_transformers import SentenceTransformer, util
+
 import torch
+from sentence_transformers import SentenceTransformer, util
 
 
 class SentenceSimilarity:
     def __init__(self):
-        self.model = SentenceTransformer('stsb-roberta-large')
+        self.model = SentenceTransformer("stsb-roberta-large")
 
-    def __encode_sentences(self, sentence1: str, sentence2: str) -> Tuple[torch.Tensor, torch.Tensor]:
-        embeddings1 = self.model.encode(sentence1, convert_to_tensor=True, device='cuda')
-        embeddings2 = self.model.encode(sentence2, convert_to_tensor=True, device='cuda')
+    def __encode_sentences(
+        self, sentence1: str, sentence2: str
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        embeddings1 = self.model.encode(
+            sentence1, convert_to_tensor=True, device="cuda"
+        )
+        embeddings2 = self.model.encode(
+            sentence2, convert_to_tensor=True, device="cuda"
+        )
         return embeddings1, embeddings2
 
     def cosine_similarity(self, sentence1: str, sentence2: str) -> float:

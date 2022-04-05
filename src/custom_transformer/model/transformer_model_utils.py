@@ -1,7 +1,8 @@
 import copy
-import torch.nn as nn
-import torch
+
 import numpy as np
+import torch
+import torch.nn as nn
 from torch.autograd import Variable
 
 
@@ -10,7 +11,7 @@ def get_clones(module, n):
 
 
 def attention_mask(size: int):
-    att_mask = np.triu(np.ones((1, size, size)), k=1).astype('uint8')
+    att_mask = np.triu(np.ones((1, size, size)), k=1).astype("uint8")
     att_mask = Variable(torch.from_numpy(att_mask) == 0)
     return att_mask
 
@@ -23,7 +24,7 @@ def create_masks(src: torch.Tensor, trg: torch.Tensor):
         size = trg.size(1)
         att_mask = attention_mask(size)
         if trg.is_cuda:
-            att_mask = att_mask.to('cuda')
+            att_mask = att_mask.to("cuda")
         trg_mask = trg_mask & att_mask
     else:
         trg_mask = None
