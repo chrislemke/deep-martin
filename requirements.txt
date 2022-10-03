@@ -18,7 +18,7 @@ gensim==3.6.0
 tensorflow==2.10.0
 tensorflow-hub==0.12.0
 rouge-score==0.1.2
-sacrebleu==1.5.1
+sacrebleu==2.2.1
 bert-score==0.3.9
 wandb==0.10.32
 nltk==3.6.6
