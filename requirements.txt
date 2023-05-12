@@ -10,7 +10,7 @@ torch==2.0.0
 torchtext==0.10.0
 requests==2.30.0
 scipy==1.10.1
-tqdm==4.49.0
+tqdm==4.65.0
 matplotlib==3.7.1
 plotly==4.14.3
 spacy==3.0.6
