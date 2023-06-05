@@ -20,6 +20,6 @@ tensorflow-hub==0.13.0
 rouge-score==0.1.2
 sacrebleu==1.5.1
 bert-score==0.3.9
-wandb==0.15.2
+wandb==0.15.3
 nltk==3.8.1
 sentence-transformers==2.2.2
