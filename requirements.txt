@@ -2,7 +2,7 @@ scikit-learn==0.24.2
 pandas==2.0.1
 numpy==1.24.3
 autopep8==2.0.2
-transformers==4.5.1
+transformers==4.29.2
 jupyter==1.0.0
 datasets==2.12.0
 bertviz==1.4.0
