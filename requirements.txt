@@ -4,7 +4,7 @@ numpy==1.24.3
 autopep8==2.0.2
 transformers==4.5.1
 jupyter==1.0.0
-datasets==1.6.2
+datasets==2.12.0
 bertviz==1.4.0
 torch==2.0.1
 torchtext==0.10.0
