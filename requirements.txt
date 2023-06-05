@@ -15,7 +15,7 @@ matplotlib==3.7.1
 plotly==4.14.3
 spacy==3.5.3
 gensim==3.6.0
-tensorflow==2.11.1
+tensorflow==2.12.0
 tensorflow-hub==0.13.0
 rouge-score==0.1.2
 sacrebleu==1.5.1
